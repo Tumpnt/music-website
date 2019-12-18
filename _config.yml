@@ -1,3 +1,7 @@
+name: Music Website
+url: https://tumpnt
+
+
 excludes:
  - 'README.md'
  - 'LICENSE'
