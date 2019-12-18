@@ -30,7 +30,7 @@ function start() {
             document.getElementById('debugbox').appendChild(btn)
         }
         for (let i in start) {
-            var pitch = (2 ** (start[i] - 57) / 12) * songpitch
+            var pitch = (2 ** (start[i] - 57 / 12)) * songpitch
             var nn = context.createOscillator()
             nn.connect(context.destination)
             nn.type = "sine"
