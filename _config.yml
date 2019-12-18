@@ -1,7 +1,30 @@
 name: Music Website
-url: https://tumpnt
+url: https://tumpnt.github.io/music-website/
+repository: tumpnt/music-website
 
+permalink: pretty
+production: true
 
-excludes:
- - 'README.md'
- - 'LICENSE'
+markdown: kramdown
+
+kramdown:
+  input: GFM
+  auto_ids: false
+
+exclude:
+  - lib
+  - Gemfile
+  - Gemfile.lock
+  - bower.json
+  - README.md
+  - gulffile.js
+  - vendor
+  - ".gitignore"
+  - CNAME
+  - icomoon-selection.json
+
+defaults:
+- scope:
+    path: ""
+  values:
+    image: /favicon.ico
