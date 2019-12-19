@@ -12,16 +12,8 @@ kramdown:
   auto_ids: false
 
 exclude:
-  - lib
-  - Gemfile
-  - Gemfile.lock
-  - bower.json
   - README.md
-  - gulffile.js
-  - vendor
   - ".gitignore"
-  - CNAME
-  - icomoon-selection.json
 
 defaults:
 - scope:
