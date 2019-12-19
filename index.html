@@ -7,6 +7,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <link rel="stylesheet" href="style.css">
+
+    <script src="lib/WebMIDIAPI.min.js"></script>
 </head>
 
 <body unselectable="on" onselectstart="return false;" onmousedown="return false;">
@@ -16,7 +18,6 @@
     <div id="clickoverlay">
         Click
     </div>
-    <script src="lib/WebMIDIAPI.min.js"></script>
     <script id="clickscript">
         document.getElementById('clickoverlay').onclick = function() {
             var elem = document.getElementById('clickoverlay')
