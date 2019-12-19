@@ -5,12 +5,6 @@ body {
     user-select:none;
     -o-user-select:none;
 }
-
-#debugbox {
-    position:relative;
-    top:100%;
-    transform:translateY(-100%);
-}
 #clickoverlay {
     color:white;
     background-color:#333;
