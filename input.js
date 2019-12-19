@@ -1,4 +1,3 @@
-var midikeyoctave = 4
 var midikey = {
 	z: 0, s: 1, x: 2, d: 3, c: 4, v: 5, g: 6, b: 7, h: 8, n: 9, j: 10, m: 11, ',': 12, l: 13, '.': 14, ';': 15, '/': 16,
 	q: 12, 2: 13, w: 14, 3: 15, e: 16, r: 17, 5: 18, t: 19, 6: 20, y: 21, 7: 22, u: 23, i: 24, 9: 25, o: 26, 0: 27, p: 28, '[': 29, '=': 30, ']': 31
@@ -25,7 +24,7 @@ function start() {
 
 function press(key) {
 	if (midikey[key.key] != undefined) {
-		var note = midikey[key.key] + midikeyoctave * 12
+		var note = midikey[key.key] + $('#midikeyoctave')[0].value * 12
 		for (let i in playingnotes) {
 			if (playingnotes[i].note == note) {
 				return
@@ -37,7 +36,7 @@ function press(key) {
 
 function unpress(key) {
 	if (midikey[key.key] != undefined) {
-		var note = midikey[key.key] + midikeyoctave * 12
+		var note = midikey[key.key] + $('#midikeyoctave')[0].value * 12
 		updatenotes([], [note])
 	}
 }

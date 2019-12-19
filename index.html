@@ -8,17 +8,18 @@
 	<title>Document</title>
 	<link rel="stylesheet" href="style.css">
 
-
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	<script src="lib/WebMIDIAPI.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/webmidi"></script>
 </head>
 
-<body unselectable="on" onselectstart="return false;" onmousedown="return false;">
-	<button type="button" onclick="midikeyoctave--;document.getElementById('octavedisplay').innerHTML=midikeyoctave">
-	&lt;</button> <span id="octavedisplay">4</span>
-	<button type="button"
-		onclick="midikeyoctave++;document.getElementById('octavedisplay').innerHTML=midikeyoctave">&gt;</button>
-<form><input type="text"></input></form>
+<body>
+
+	<input type="number" class="smallinput" id="midikeyoctave" value="4">
+	<button type="button" onclick="$('#midikeyoctave')[0].value--">-</button>
+	<button type="button" onclick="$('#midikeyoctave')[0].value++">+</button>
+	<br>
+	<input type="text" placeholder="does nothing">
 	<div id="clickoverlay">
 		Click
 	</div>
