@@ -8,6 +8,7 @@
 	<title>Document</title>
 	<link rel="stylesheet" href="style.css">
 
+
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	<script src="lib/WebMIDIAPI.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/webmidi"></script>
@@ -20,20 +21,24 @@
 	<button type="button" onclick="$('#midikeyoctave')[0].value++">+</button>
 	<br>
 	<input type="text" placeholder="does nothing">
+
 	<div id="clickoverlay">
 		Click
 	</div>
+
+	<script src="events.js"></script>
+	<script src="sound.js"></script>
+	<script src="input.js"></script>
 	<script id="clickscript">
 		document.getElementById('clickoverlay').onclick = function () {
 			var elem = document.getElementById('clickoverlay')
 			elem.parentNode.removeChild(elem);
-			start()
+			//start()
+			sarpntEventHandler.dispatchEvent("start");
 			var elem = document.getElementById('clickscript')
 			elem.parentNode.removeChild(elem);
 		}
 	</script>
-	<script src="sound.js"></script>
-	<script src="input.js"></script>
 
 </body>
 
