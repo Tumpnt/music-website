@@ -66,3 +66,51 @@ function start() {
         }
     }
 }
+
+WebMidi.enable(function(err) {
+	if (err) {
+		console.log("Could not access your MIDI devices.", err);
+		return;
+	}
+	console.log("This browser supports WebMIDI!");
+
+	var inputs = WebMidi.inputs;
+	var outputs = WebMidi.outputs;
+	for (var input of inputs) {
+		input.addListener("noteon", "all", NoteOn);
+		input.addListener("noteoff", "all", NoteOff);
+	}
+});
+
+function NoteOn({
+	target,
+	data,
+	timestamp,
+	channel,
+	type,
+	note,
+	velocity,
+	rawVelocity
+}) {
+	console.log("NoteOn",{
+                    note:note.name+note.octave,
+                    velocity,
+                    id:note.number
+                });
+}
+
+function NoteOff({
+	target,
+	data,
+	timestamp,
+	channel,
+	type,
+	note,
+	velocity,
+	rawVelocity
+}) {
+	console.log("NoteOff",{
+                    note:note.name+note.octave,
+                    id:note.number
+                });
+}
