@@ -2,34 +2,36 @@
 <html>
 
 <head lang="en">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-    <link rel="stylesheet" href="style.css">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+	<link rel="stylesheet" href="style.css">
 
 
-    <script src="lib/WebMIDIAPI.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/webmidi"></script>
+	<script src="lib/WebMIDIAPI.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/webmidi"></script>
 </head>
 
 <body unselectable="on" onselectstart="return false;" onmousedown="return false;">
-    <button type="button" onclick="midikeyoctave--;document.getElementById('octavedisplay').innerHTML=midikeyoctave">
-		</button> <span id="octavedisplay">4</span>
-    <button type="button" onclick="midikeyoctave++;document.getElementById('octavedisplay').innerHTML=midikeyoctave">></button>
-    <div id="clickoverlay">
-        Click
-    </div>
-    <script id="clickscript">
-        document.getElementById('clickoverlay').onclick = function() {
-            var elem = document.getElementById('clickoverlay')
-            elem.parentNode.removeChild(elem);
-            start()
-            var elem = document.getElementById('clickscript')
-            elem.parentNode.removeChild(elem);
-        }
-    </script>
-    <script src="notes.js"></script>
+	<button type="button" onclick="midikeyoctave--;document.getElementById('octavedisplay').innerHTML=midikeyoctave">
+	&lt;</button> <span id="octavedisplay">4</span>
+	<button type="button"
+		onclick="midikeyoctave++;document.getElementById('octavedisplay').innerHTML=midikeyoctave">&gt;</button>
+	<div id="clickoverlay">
+		Click
+	</div>
+	<script id="clickscript">
+		document.getElementById('clickoverlay').onclick = function () {
+			var elem = document.getElementById('clickoverlay')
+			elem.parentNode.removeChild(elem);
+			start()
+			var elem = document.getElementById('clickscript')
+			elem.parentNode.removeChild(elem);
+		}
+	</script>
+	<script src="sound.js"></script>
+	<script src="input.js"></script>
 
 </body>
 
