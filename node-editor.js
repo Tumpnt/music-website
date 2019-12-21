@@ -34,16 +34,6 @@ sarpntEventHandler.addEventListener('start', async function () {
 		editor.use(ConnectionPlugin.default)
 		editor.use(VueRenderPlugin.default)
 
-		const editor = new Rete.NodeEditor('demo@0.1.0', container)
-		editor.use(ConnectionPlugin.default)
-		editor.use(VueRenderPlugin.default)
-
-		const engine = new Rete.Engine('demo@0.1.0')
-		components.map(c => {
-			editor.register(c)
-			engine.register(c)
-		})
-
 		const engine = new Rete.Engine('demo@0.1.0')
 		components.map(c => {
 			editor.register(c)
