@@ -47,6 +47,12 @@ sarpntEventHandler.addEventListener('start', async function () {
 		await engine.process(editor.toJSON())
 	})
 
-	editor.view.resize()
-	editor.trigger('process')
+    editor.on('process nodecreated noderemoved connectioncreated connectionremoved', async() => {
+        console.log('process');
+        await engine.abort();
+        await engine.process(editor.toJSON());
+    });
+
+    editor.view.resize();
+    editor.trigger('process');
 })
