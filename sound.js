@@ -25,7 +25,6 @@ function updatenotes(start, stop) {
 	}
 	for (let i in start) {
 		var pitch = (2 ** ((start[i] - 57) / 12)) * songpitch
-		console.log(pitch)
 		var nn = context.createOscillator()
 		nn.connect(context.destination)
 		nn.type = "sine"
