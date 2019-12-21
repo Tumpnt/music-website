@@ -60,10 +60,3 @@ sarpntEventHandler.addEventListener('start', async function() {
     editor.view.resize();
     editor.trigger('process');
 })
-
-
-var i = new Image();
-i.onload = function() {
-    document.body.appendChild(i);
-}
-i.src = "Capture.PNG";
