@@ -39,7 +39,7 @@ interact('#nodepane')
 	})
 	.on('resizemove', function (event) {
 		var target = event.target
-		var width = event.rect.width/window.innerWidth*100
+		var width = event.rect.width / window.innerWidth * 100
 		// update the element's style
 		if (width < 10)
 			target.style.width = 0 + '%'
