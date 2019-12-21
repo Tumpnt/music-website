@@ -56,6 +56,7 @@ function NoteOn({
 		velocity,
 		id: note.number
 	})
+	updatenotes([note.number], [])
 }
 
 function NoteOff({
@@ -72,4 +73,5 @@ function NoteOff({
 		note: note.name + note.octave,
 		id: note.number
 	})
+	updatenotes([], [note.number])
 }
