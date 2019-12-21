@@ -1,3 +1,5 @@
+var sarpntEventHandler = new EventHandler()
+
 class EventHandler {
 	constructor() {
 		this.listeners = {}
