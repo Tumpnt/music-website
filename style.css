@@ -7,6 +7,8 @@ body {
 	display: flex;
 	min-height: 100vh;
 	flex-direction: column;
+}
+body,main,footer {
 	overflow: hidden;
 }
 
@@ -31,7 +33,6 @@ footer {
 	bottom: 0;
 	width: 100vw;
 	background: grey;
-	resize: vertical;
 }
 
 input[type=text] {
