@@ -1,11 +1,12 @@
 body {
 	user-select:none;
+	margin:0px;
 }
 input[type=text] {
 	user-select:auto;
 }
 .smallinput {
-	width:30px
+	width:30px;
 }
 #clickoverlay {
 	color:white;
@@ -16,4 +17,42 @@ input[type=text] {
 	top:0px;
 	left:0px;
 	z-index:1000;
+}
+#footer {
+	position:fixed;
+	width:100vw;
+	bottom:0px;
+	background:grey;
+	resize: vertical;
+}
+#piano-options {
+	padding: 2px;
+}
+#piano {
+	background:green;
+	display:block;
+	height:100px;
+	width:100px;
+	overflow: visible;
+	white-space: nowrap;
+}
+#piano * {
+	display:inline-block;
+}
+#piano .white {
+	background:white;
+	border-right: gray solid 1px;
+	height:100%;
+	width:30%;
+	z-index:0;
+}
+#piano .black {
+	position:relative;
+	bottom:40%; 
+	right:10%;
+	background:black;
+	height:60%;
+	width:20%;
+	z-index:1;
+	margin-right:-20%;
 }
