@@ -16,7 +16,7 @@ exclude:
   - ".gitignore"
 
 defaults:
-- scope:
-    path: ""
-  values:
-    image: /favicon.ico
+  - scope:
+      path: ""
+    values:
+      image: /favicon.ico

@@ -9,14 +9,24 @@
 	<link rel="stylesheet" href="style.css">
 
 
+	<!-- libraies-->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+	<script src="https://cdn.jsdelivr.net/npm/rete@1.4.2/build/rete.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.6/vue.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/rete-vue-render-plugin@0.5.0/build/vue-render-plugin.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/rete-connection-plugin@0.9.0/build/connection-plugin.min.js"></script>
+
 	<script src="lib/WebMIDIAPI.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/webmidi"></script>
 	<script src="https://unpkg.com/interactjs/dist/interact.min.js"></script>
 </head>
 
 <body>
-	<div id="footer">
+	<main>
+		<div id="rete"></div>
+	</main>
+	<footer>
 		<div id="piano-options">
 			<input type="number" class="smallinput" id="midikeyoctave" value="4">
 			<button type="button" onclick="$('#midikeyoctave')[0].value--">-</button>
@@ -25,12 +35,13 @@
 		<div id="piano">
 			<div></div>
 		</div>
-	</div>
+	</footer>
 	<div id="clickoverlay">
 		Click
 	</div>
 
 	<script>
+		//Piano Creation
 		{
 			let key
 			for (let i = 0; i < 132; i++) {
@@ -82,9 +93,14 @@
 			})
 	</script>
 
+
+
+
+	<!--scripts-->
 	<script src="events.js"></script>
 	<script src="sound.js"></script>
 	<script src="input.js"></script>
+	<script src="node-editor.js"></script>
 	<script id="clickscript">
 		document.getElementById('clickoverlay').onclick = function () {
 			var elem = document.getElementById('clickoverlay')
