@@ -1,58 +1,84 @@
 body {
-	user-select:none;
-	margin:0px;
+	user-select: none;
+	margin: 0px;
 }
+
 input[type=text] {
-	user-select:auto;
+	user-select: auto;
 }
+
 .smallinput {
-	width:30px;
+	width: 30px;
 }
+
 #clickoverlay {
-	color:white;
-	background-color:#333;
-	position:fixed;
-	width:100%;
-	height:100%;
-	top:0px;
-	left:0px;
-	z-index:1000;
+	color: white;
+	background-color: #333;
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	top: 0px;
+	left: 0px;
+	z-index: 1000;
 }
+
 #footer {
-	position:fixed;
-	width:100vw;
-	bottom:0px;
-	background:grey;
+	position: fixed;
+	width: 100vw;
+	bottom: 0px;
+	background: grey;
 	resize: vertical;
 }
+
 #piano-options {
 	padding: 2px;
 }
+
 #piano {
-	background:green;
-	display:block;
-	height:100px;
-	width:100px;
+	background: black;
+	height: 100px;
+	padding-top: 4px;
+	box-sizing: border-box;
+}
+
+#piano * {
+	display: block;
+	height: 100%;
+	width: 100px;
 	overflow: visible;
 	white-space: nowrap;
 }
-#piano * {
-	display:inline-block;
+
+#piano * * {
+	display: inline-block;
 }
-#piano .white {
-	background:white;
+
+#piano * * * {
+	position: absolute;
+	display: inline;
+	bottom: 0px;
+	height: auto;
+	width: auto;
+	/* it says this is ignored but it actually isn't */
+	background: none;
+}
+
+#piano * .white {
+	background: white;
 	border-right: gray solid 1px;
-	height:100%;
-	width:30%;
-	z-index:0;
+	height: 100%;
+	width: 30%;
+	z-index: 0;
+	top: 0%;
 }
-#piano .black {
-	position:relative;
-	bottom:40%; 
-	right:10%;
-	background:black;
-	height:60%;
-	width:20%;
-	z-index:1;
-	margin-right:-20%;
+
+#piano * .black {
+	position: relative;
+	bottom: 40%;
+	right: 10%;
+	background: black;
+	height: 60%;
+	width: 20%;
+	z-index: 1;
+	margin-right: -20%;
 }
