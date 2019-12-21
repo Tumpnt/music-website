@@ -10,7 +10,7 @@ class NumComponent extends Rete.Component {
     }
 
     builder(node) {
-        let out = new Rete.Output('num', 'number', numSocket);
+        let out = new Rete.Output('num', 'Number', numSocket);
 
         node.addOutput(out);
     }
@@ -21,7 +21,6 @@ class NumComponent extends Rete.Component {
 }
 
 
-
 /**
  * Initialise Editor
  */
@@ -29,7 +28,7 @@ sarpntEventHandler.addEventListener('start', function() {
     const container = document.querySelector('#rete');
     const editor = new Rete.NodeEditor('demo@0.1.0', container);
 
-    editor.use(ConnectionPlugin.default)
+    editor.use(ConnectionPlugin)
     editor.use(VueRenderPlugin)
 
     const numComponent = new NumComponent();

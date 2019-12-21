@@ -22,7 +22,9 @@
 </head>
 
 <body>
-    <div id="rete"></div>
+    <div id="workspace">
+        <div id="rete"></div>
+    </div>
     <div id="footer">
         <div id="piano-options">
             <input type="number" class="smallinput" id="midikeyoctave" value="4">
@@ -58,6 +60,7 @@
     <script src="events.js"></script>
     <script src="sound.js"></script>
     <script src="input.js"></script>
+    <script src="node-editor.js"></script>
     <script id="clickscript">
         document.getElementById('clickoverlay').onclick = function() {
             var elem = document.getElementById('clickoverlay')
