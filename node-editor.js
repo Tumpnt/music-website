@@ -69,4 +69,4 @@ sarpntEventHandler.addEventListener('start', async function () {
 
 		editor.view.resize()
 		editor.trigger('process')
-	})}
+	})})
