@@ -19,15 +19,14 @@ function updatenotes(start, stop) {
 		}
 		if (notetodelete) {
 			//notetodelete.stop()
+			$('.key')[stop[i]].style = {}
 		}
 	}
 	for (let i in start) {
-		//var nn = context.createOscillator()
-		//nn.connect(context.destination)
-		//nn.type = "sine"
-		//nn.frequency.setTargetAtTime(pitch, context.currentTime, 0)
 		//nn.start()
 
-		playingnotes.unshift({ sound: nn, note: start[i] })
+		$('.key')[start[i]].style['background-color'] = 'red'
+
+		playingnotes.unshift({ sound:1, note: start[i] })
 	}
 }

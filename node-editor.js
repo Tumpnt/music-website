@@ -58,7 +58,10 @@ class OscComponent extends Rete.Component {
 	}
 
 	worker(node, inputs, outputs) {
-		outputs['sound'] = 0
+		var osc = context.createOscillator()
+		osc.type = "sine"
+		osc.frequency.setTargetAtTime(inputs['pitch'], context.currentTime, 0)
+		outputs['sound'] = osc
 	}
 }
 var n1
