@@ -22,10 +22,11 @@ main {
 	flex: 1 0 auto;
 }
 #nodepane {
-	width: 50%;
+	width: 100%;
 	border-left: 4px solid grey;
 	box-sizing: border-box;
 	touch-action: none;
+	transform:translateX(50%);
 }
 
 footer {
