@@ -19,7 +19,7 @@ sarpntEventHandler.addEventListener("start", function () {
 			input.addListener("noteon", "all", NoteOn)
 			input.addListener("noteoff", "all", NoteOff)
 		}
-	})
+	});
 })
 
 function press(key) {
