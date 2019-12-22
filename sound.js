@@ -18,7 +18,7 @@ function updatenotes(start, stop) {
 			}
 		}
 		if (notetodelete) {
-			notetodelete.stop()
+			//notetodelete.stop()
 		}
 	}
 	for (let i in start) {
