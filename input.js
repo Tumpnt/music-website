@@ -20,9 +20,6 @@ sarpntEventHandler.addEventListener("start", function () {
 			input.addListener("noteoff", "all", NoteOff)
 		}
 	});
-	
-
-	console.log("Yes sarpnt, I put this here.")
 })
 
 function press(key) {
