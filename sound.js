@@ -22,12 +22,12 @@ function updatenotes(start, stop) {
 		}
 	}
 	for (let i in start) {
-		var pitch = (2 ** ((start[i] - 57) / 12)) * songpitch
-		var nn = context.createOscillator()
-		nn.connect(context.destination)
-		nn.type = "sine"
-		nn.frequency.setTargetAtTime(pitch, context.currentTime, 0)
-		nn.start()
+		//var pitch = (2 ** ((start[i] - 57) / 12)) * songpitch
+		//var nn = context.createOscillator()
+		//nn.connect(context.destination)
+		//nn.type = "sine"
+		//nn.frequency.setTargetAtTime(pitch, context.currentTime, 0)
+		//nn.start()
 
 		playingnotes.unshift({ sound: nn, note: start[i] })
 	}

@@ -75,6 +75,7 @@ input[type=text] {
 
 #piano * * {
 	display: inline-block;
+	overflow: hidden;
 }
 
 #piano * * * {

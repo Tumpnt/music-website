@@ -52,6 +52,7 @@ function NoteOn({
 	rawVelocity
 }) {
 	console.log("NoteOn", {
+		channel,
 		note: note.name + note.octave,
 		velocity,
 		id: note.number

@@ -1,62 +1,82 @@
 //Create Editor
 //create instance
-const numSocket = new Rete.Socket('Number value')
+const numSocket = new Rete.Socket('Number')
+const soundSocket = new Rete.Socket('Sound')
 
-class NumComponent extends Rete.Component {
+class InComponent extends Rete.Component {
 	constructor() {
-		super('Number')
+		super('Input')
 	}
 
 	builder(node) {
-		let out = new Rete.Output('num', 'Number', numSocket)
-
-		node.addOutput(out)
+		node.addOutput(new Rete.Output('note', 'Note', numSocket))
 	}
 
 	worker(node, inputs, outputs) {
-		outputs['num'] = node.data.num
+		outputs['note'] = 0
 	}
 }
 
+class OutComponent extends Rete.Component {
+	constructor() {
+		super('Output')
+	}
+
+	builder(node) {
+		node.addInput(new Rete.Input('sound', 'Sound', soundSocket))
+	}
+
+	worker(node, inputs, outputs) {
+		if (inputs['sound'])
+			inputs['sound'].connect(context.destination)
+	}
+}
+
+class OscComponent extends Rete.Component {
+	constructor() {
+		super('Oscillator')
+	}
+
+	builder(node) {
+		node.addOutput(new Rete.Output('sound', 'Sound', soundSocket))
+		node.addInput(new Rete.Input('note', 'Note', numSocket))
+	}
+
+	worker(node, inputs, outputs) {
+		outputs['sound'] = 0
+	}
+}
+var n1
 //Initialise Editor
 sarpntEventHandler.addEventListener('start', async function () {
 	const container = document.querySelector('#rete')
-	const components = [new NumComponent()]
+	const components = [new InComponent(), new OutComponent(), new OscComponent()]
+	const editor = new Rete.NodeEditor('demo@0.1.0', container)
+	editor.use(ConnectionPlugin.default)
+	editor.use(VueRenderPlugin.default)
 
-	/**
-	 * Initialise Editor
-	 */
-	sarpntEventHandler.addEventListener('start', async function () {
-		const container = document.querySelector('#rete')
-		const components = [new NumComponent()]
+	const engine = new Rete.Engine('demo@0.1.0')
+	components.map(c => {
+		editor.register(c)
+	})
+	
 
-		const editor = new Rete.NodeEditor('demo@0.1.0', container)
-		editor.use(ConnectionPlugin.default)
-		editor.use(VueRenderPlugin.default)
+	//preset Nodes
+	n1 = await components[0].createNode()
+	n1.position = [0, 0]
+	editor.addNode(n1)
+	n1 = await components[2].createNode()
+	n1.position = [250, 0]
+	editor.addNode(n1)
+	n1 = await components[1].createNode()
+	n1.position = [500, 0]
+	editor.addNode(n1)
 
-		const engine = new Rete.Engine('demo@0.1.0')
-		components.map(c => {
-			editor.register(c)
-			engine.register(c)
-		})
+	editor.on('process nodecreated noderemoved connectioncreated connectionremoved', async () => {
+		await engine.abort()
+		await engine.process(editor.toJSON())
+	})
 
-		//preset Nodes
-		var n1 = await components[0].createNode({ num: 2 })
-
-		var loop = () => {
-			n1.position = [80, 200]
-			requestAnimationFrame(loop)
-		}
-		requestAnimationFrame(loop)
-		n1.position = [80, 200]
-		editor.addNode(n1)
-
-		editor.on('process nodecreated noderemoved connectioncreated connectionremoved', async () => {
-			console.log('process')
-			await engine.abort()
-			await engine.process(editor.toJSON())
-		})
-
-		editor.view.resize()
-		editor.trigger('process')
-	})})
+	editor.view.resize()
+	editor.trigger('process')
+})
