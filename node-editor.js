@@ -64,12 +64,23 @@ class OscComponent extends Rete.Component {
 		outputs['sound'] = osc
 	}
 }
-var n1
+
+const container = document.querySelector('#rete')
+const editor = new Rete.NodeEditor('demo@0.1.0', container)
+var nodepages = []
+const components = [new InComponent(), new OutComponent(), new PitchComponent, new OscComponent()]
+
+async function newNode(t, p, x, y) { //type, page, x,y
+	var tn = await components[t].createNode()
+	tn.position = [x,y]
+	editor.addNode(tn)
+	if (!nodepages[p])
+		nodepages[p] = []
+	nodepages[p].push(tn)
+}
 //Initialise Editor
 sarpntEventHandler.addEventListener('start', async function () {
-	const container = document.querySelector('#rete')
-	const components = [new InComponent(), new OutComponent(), new PitchComponent, new OscComponent()]
-	const editor = new Rete.NodeEditor('demo@0.1.0', container)
+
 	editor.use(ConnectionPlugin.default)
 	editor.use(VueRenderPlugin.default)
 
@@ -77,21 +88,16 @@ sarpntEventHandler.addEventListener('start', async function () {
 	components.map(c => {
 		editor.register(c)
 	})
-	
+
 
 	//preset Nodes
-	n1 = await components[0].createNode()
-	n1.position = [0, 0]
-	editor.addNode(n1)
-	n1 = await components[2].createNode()
-	n1.position = [150, 0]
-	editor.addNode(n1)
-	n1 = await components[3].createNode()
-	n1.position = [300, 0]
-	editor.addNode(n1)
-	n1 = await components[1].createNode()
-	n1.position = [450, 0]
-	editor.addNode(n1)
+	await newNode(0, 0, 0, 0)
+	await newNode(2, 0, 150, 0)
+	await newNode(3, 0, 300, 0)
+	await newNode(1, 0, 450, 0)
+	editor.connect(nodepages[0][0].outputs.get('note'),nodepages[0][1].inputs.get('note'))
+	editor.connect(nodepages[0][1].outputs.get('pitch'),nodepages[0][2].inputs.get('pitch'))
+	editor.connect(nodepages[0][2].outputs.get('sound'),nodepages[0][3].inputs.get('sound'))
 
 	editor.on('process nodecreated noderemoved connectioncreated connectionremoved', async () => {
 		await engine.abort()
