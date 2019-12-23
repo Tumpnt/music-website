@@ -25,7 +25,6 @@ interact('#piano')
 		}
 		target.children[0].style.width = event.rect.height + 'px'
 	})
-var npanewidth = 50
 interact('#nodepane')
 	.resizable({
 		edges: { left: true, right: false, bottom: false, top: false },
@@ -38,19 +37,13 @@ interact('#nodepane')
 		],
 	})
 	.on('resizemove', function (event) {
-		var target = event.target.style
-		npanewidth = (event.dx / window.innerWidth) * 100 + npanewidth
+		var target = event.target
+		var width = event.rect.width / window.innerWidth * 100
 		// update the element's style
-		if (npanewidth < 10)
-			target.webkitTransform = target.transform = 'translateX(0%)'
-		else if (npanewidth > 90)
-			target.webkitTransform = target.transform = 'translateX(100%) translateX(-4px)'
+		if (width < 10)
+			target.style.width = 0 + '%'
+		else if (width > 90)
+			target.style.width = 100 + '%'
 		else
-			target.webkitTransform = target.transform = 'translateX(' + npanewidth + '%)'
-	})
-	.on('up', function (event) {
-		if (npanewidth < 10)
-			npanewidth = 0
-		else if (npanewidth > 90)
-			npanewidth = 100
+			target.style.width = width + '%'
 	})

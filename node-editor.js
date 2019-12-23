@@ -88,7 +88,7 @@ sarpntEventHandler.addEventListener('start', async function () {
 	components.map(c => {
 		editor.register(c)
 	})
-
+	
 
 	//preset Nodes
 	await newNode(0, 0, 0, 0)
@@ -103,7 +103,6 @@ sarpntEventHandler.addEventListener('start', async function () {
 		await engine.abort()
 		await engine.process(editor.toJSON())
 	})
-
-	editor.view.resize()
+	
 	editor.trigger('process')
 })
