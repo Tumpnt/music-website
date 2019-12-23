@@ -84,13 +84,13 @@ sarpntEventHandler.addEventListener('start', async function () {
 	n1.position = [0, 0]
 	editor.addNode(n1)
 	n1 = await components[2].createNode()
-	n1.position = [250, 0]
+	n1.position = [150, 0]
 	editor.addNode(n1)
 	n1 = await components[3].createNode()
-	n1.position = [500, 0]
+	n1.position = [300, 0]
 	editor.addNode(n1)
 	n1 = await components[1].createNode()
-	n1.position = [750, 0]
+	n1.position = [450, 0]
 	editor.addNode(n1)
 
 	editor.on('process nodecreated noderemoved connectioncreated connectionremoved', async () => {

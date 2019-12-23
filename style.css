@@ -28,6 +28,31 @@ main {
 	touch-action: none;
 	transform:translateX(50%);
 }
+#nodepane .node {
+	border: 1px solid black;
+	border-radius: 4px;
+	padding:0px;
+	min-width: 100px;
+	background:#bbb;
+}
+#nodepane .node>* {
+	padding:3px;
+}
+#nodepane .title {
+	font-size:16px;
+	background:#999;
+}
+#nodepane .output *,#nodepane .input * {
+	margin:0px;
+}
+#nodepane .socket.output{
+	margin-right: -14px;
+	margin-left: 6px;
+}
+#nodepane .socket.input{
+	margin-left: -14px;
+	margin-right: 6px;
+}
 
 footer {
 	left: 0;
