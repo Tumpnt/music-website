@@ -30,7 +30,7 @@ class EventHandler {
 		for (var i = 0, l = stack.length; i < l; i++) {
 			stack[i].call(this, ...params)
 		}
-	};
+	}
 }
 
 var sarpntEventHandler = new EventHandler()

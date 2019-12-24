@@ -2,6 +2,7 @@
 //create instance
 const numSocket = new Rete.Socket('Number')
 const soundSocket = new Rete.Socket('Sound')
+const actionSocket = new Rete.Socket('Action')
 
 class InComponent extends Rete.Component {
 	constructor() {
@@ -11,11 +12,16 @@ class InComponent extends Rete.Component {
 	builder(node) {
 		node.addOutput(new Rete.Output('note', 'Note', numSocket))
 		node.addOutput(new Rete.Output('pitch', 'Pitch', numSocket))
+		node.addOutput(new Rete.Output('start', 'Start', actionSocket))
+		node.addOutput(new Rete.Output('stop', 'Stop', actionSocket))
 	}
 
 	worker(node, inputs, outputs) {
-		outputs['note'] = 0
-		outputs['pitch'] = 0 //(2 ** ((outputs['note'] - 57) / 12)) * songpitch
+		var ntemp = 0
+		outputs['note'] = ntemp
+		outputs['pitch'] = (2 ** ((ntemp - 57) / 12)) * songpitch
+		outputs['start'] = 0
+		outputs['stop'] = 0
 	}
 }
 
@@ -59,7 +65,7 @@ const components = [new InComponent(), new OutComponent(), new OscComponent()]
 
 async function newNode(t, p, x, y) { //type, page, x,y
 	var tn = await components[t].createNode()
-	tn.position = [x,y]
+	tn.position = [x, y]
 	editor.addNode(tn)
 	if (!nodepages[p])
 		nodepages[p] = []
@@ -75,19 +81,19 @@ sarpntEventHandler.addEventListener('start', async function () {
 	components.map(c => {
 		editor.register(c)
 	})
-	
+
 
 	//preset Nodes
 	await newNode(0, 0, 0, 0)
 	await newNode(2, 0, 150, 0)
 	await newNode(1, 0, 300, 0)
-	editor.connect(nodepages[0][0].outputs.get('pitch'),nodepages[0][1].inputs.get('pitch'))
-	editor.connect(nodepages[0][1].outputs.get('sound'),nodepages[0][2].inputs.get('sound'))
+	editor.connect(nodepages[0][0].outputs.get('pitch'), nodepages[0][1].inputs.get('pitch'))
+	editor.connect(nodepages[0][1].outputs.get('sound'), nodepages[0][2].inputs.get('sound'))
 
 	editor.on('process nodecreated noderemoved connectioncreated connectionremoved', async () => {
 		await engine.abort()
 		await engine.process(editor.toJSON())
 	})
-	
+
 	editor.trigger('process')
 })
