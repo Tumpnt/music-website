@@ -8,25 +8,28 @@ genEvent.add("init", function () {
 
 function updatenotes(start, stop) {
 	for (let i in stop) {
-		var notetodelete
+		var ntd
+		var n = stop[i]
 		for (let ii in playingnotes) {
-			if (playingnotes[ii].note == stop[i]) {
-				notetodelete = playingnotes[ii].sound
+			var s = playingnotes[ii]
+			if (s.note == n) {
+				ntd = s.sound
 				playingnotes.splice(ii, 1)
 
 				break
 			}
 		}
-		if (notetodelete) {
-			//notetodelete.stop()
-			$('.key')[stop[i]].style = {}
+		if (ntd) {
+			//ntd.stop()
+			$('.key')[n].style = {}
 		}
 	}
 	for (let i in start) {
-		//nn.start()
+		var n = start[i]
+		genEvent.send('noteStart', n)
 
-		$('.key')[start[i]].style['background-color'] = 'red'
+		$('.key')[n].style['background-color'] = 'red'
 
-		playingnotes.unshift({ sound:1, note: start[i] })
+		playingnotes.unshift({ sound: 1, note: n })
 	}
 }

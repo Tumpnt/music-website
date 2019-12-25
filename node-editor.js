@@ -8,15 +8,16 @@ class InComponent extends Rete.Component {
 	constructor() {
 		super('Input')
 		this.task = {
-			outputs: {act: 'option', key: 'output'},
-			init(task){
-			  genEvent.remove();
-			  genEvent.add('keydown', function (e) {
-				 task.run(e.keyCode);
-				 task.reset();
-			  });
+			outputs: { act: 'option', key: 'output' },
+			init(task) {
+				console.log('init')
+				genEvent.add('noteStart', function (note) {
+					console.log('taskrun')
+					task.run(note)
+					task.reset()
+				})
 			}
-		 }
+		}
 	}
 
 	builder(node) {
@@ -27,6 +28,7 @@ class InComponent extends Rete.Component {
 	}
 
 	worker(node, inputs, outputs) {
+		console.log('worker')
 		outputs['note'] = 0
 		outputs['pitch'] = (2 ** ((outputs['note'] - 57) / 12)) * songpitch
 		outputs['start'] = 0
