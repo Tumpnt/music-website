@@ -3,8 +3,8 @@ var midikey = {
 }
 
 genEvent.add("start", function () {
-	add("keydown", press)
-	add("keyup", unpress)
+	addEventListener("keydown", press)
+	addEventListener("keyup", unpress)
 
 	WebMidi.enable(function (err) {
 		if (err) {
