@@ -2,7 +2,7 @@ var context
 var songpitch = 440
 var playingnotes = []
 
-genEvent.add("start", function () {
+genEvent.add("init", function () {
 	context = new AudioContext()
 })
 

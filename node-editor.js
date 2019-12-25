@@ -81,7 +81,7 @@ async function newNode(t, p, x, y) { //type, page, x,y
 	nodepages[p].push(tn)
 }
 //Initialise Editor
-genEvent.add('start', async function () {
+genEvent.add('init', async function () {
 
 	editor.use(ConnectionPlugin.default)
 	editor.use(VueRenderPlugin.default)
