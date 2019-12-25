@@ -2,7 +2,7 @@ var context
 var songpitch = 440
 var playingnotes = []
 
-sarpntEventHandler.addEventListener("start", function () {
+genEvent.addEventL("start", function () {
 	context = new AudioContext()
 })
 

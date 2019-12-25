@@ -17,9 +17,8 @@ class InComponent extends Rete.Component {
 	}
 
 	worker(node, inputs, outputs) {
-		var ntemp = 0
-		outputs['note'] = ntemp
-		outputs['pitch'] = (2 ** ((ntemp - 57) / 12)) * songpitch
+		outputs['note'] = 0
+		outputs['pitch'] = (2 ** ((outputs['note'] - 57) / 12)) * songpitch
 		outputs['start'] = 0
 		outputs['stop'] = 0
 	}
@@ -72,7 +71,7 @@ async function newNode(t, p, x, y) { //type, page, x,y
 	nodepages[p].push(tn)
 }
 //Initialise Editor
-sarpntEventHandler.addEventListener('start', async function () {
+genEvent.addEventL('start', async function () {
 
 	editor.use(ConnectionPlugin.default)
 	editor.use(VueRenderPlugin.default)

@@ -3,13 +3,13 @@ class EventHandler {
 		this.listeners = {}
 	}
 
-	addEventListener(type, callback) {
+	addEventL(type, callback) {
 		if (!(type in this.listeners)) {
 			this.listeners[type] = []
 		}
 		this.listeners[type].push(callback)
 	}
-	removeEventListener(type, callback) {
+	removeEventL(type, callback) {
 		if (!(type in this.listeners)) {
 			return
 		}
@@ -21,7 +21,7 @@ class EventHandler {
 			}
 		}
 	}
-	dispatchEvent(event, ...params) {
+	sendEvent(event, ...params) {
 		if (!(event in this.listeners)) {
 			return true
 		}
@@ -33,4 +33,4 @@ class EventHandler {
 	}
 }
 
-var sarpntEventHandler = new EventHandler()
+var genEvent = new EventHandler()
