@@ -3,13 +3,13 @@ class EventHandler {
 		this.listeners = {}
 	}
 
-	addEventL(type, callback) {
+	add(type, callback) {
 		if (!(type in this.listeners)) {
 			this.listeners[type] = []
 		}
 		this.listeners[type].push(callback)
 	}
-	removeEventL(type, callback) {
+	remove(type, callback) {
 		if (!(type in this.listeners)) {
 			return
 		}
@@ -21,7 +21,7 @@ class EventHandler {
 			}
 		}
 	}
-	sendEvent(event, ...params) {
+	send(event, ...params) {
 		if (!(event in this.listeners)) {
 			return true
 		}

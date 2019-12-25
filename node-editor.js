@@ -7,6 +7,16 @@ const actionSocket = new Rete.Socket('Action')
 class InComponent extends Rete.Component {
 	constructor() {
 		super('Input')
+		this.task = {
+			outputs: {act: 'option', key: 'output'},
+			init(task){
+			  genEvent.remove();
+			  genEvent.add('keydown', function (e) {
+				 task.run(e.keyCode);
+				 task.reset();
+			  });
+			}
+		 }
 	}
 
 	builder(node) {
@@ -71,7 +81,7 @@ async function newNode(t, p, x, y) { //type, page, x,y
 	nodepages[p].push(tn)
 }
 //Initialise Editor
-genEvent.addEventL('start', async function () {
+genEvent.add('start', async function () {
 
 	editor.use(ConnectionPlugin.default)
 	editor.use(VueRenderPlugin.default)

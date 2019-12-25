@@ -1,4 +1,3 @@
-//piano key generation
 {
 	let key
 	for (let i = 0; i < 132; i++) {
