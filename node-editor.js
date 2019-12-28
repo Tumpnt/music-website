@@ -40,11 +40,9 @@ class InComponent extends Rete.Component {
 		this.closed = ['note', 'pitch']
 		if (data.event == 'start') {
 			this.closed.push('stop')
-			console.log('start')
 		}
 		else {
 			this.closed.push('start')
-			console.log('stop')
 		}
 		return {
 			note: data.note,
@@ -66,14 +64,17 @@ class TestComponent extends Rete.Component {
 			.addInput(new Rete.Input('run', 'Run', actionSocket))
 	}
 
-	worker(node, inputs, outputs) {
-		console.log({ node: node, inputs: inputs, outputs: outputs })
+	worker(node, inputs) {
+		console.log(inputs.value[0])
 	}
 }
 
 class OutComponent extends Rete.Component {
 	constructor() {
 		super('Output')
+		this.task = {
+			outputs: {}
+		}
 	}
 
 	builder(node) {
@@ -81,28 +82,34 @@ class OutComponent extends Rete.Component {
 			.addInput(new Rete.Input('sound', 'Sound', soundSocket))
 	}
 
-	worker(node, inputs, outputs) {
-		if (inputs['sound'])
-			inputs['sound'].connect(context.destination)
+	worker(node, inputs) {
+		console.log(inputs.sound[0])
+		//connect to context.destination
 	}
 }
 
 class OscComponent extends Rete.Component {
 	constructor() {
 		super('Oscillator')
+		this.task = {
+			outputs: {sound: 'output'},
+			init(task) {
+				var osc = context.createOscillator()
+			}
+		}
 	}
 
 	builder(node) {
 		node
 			.addOutput(new Rete.Output('sound', 'Sound', soundSocket))
 			.addInput(new Rete.Input('pitch', 'Pitch', numSocket))
+			.addInput(new Rete.Input('start', 'Start', actionSocket))
 	}
 
-	worker(node, inputs, outputs) {
-		var osc = context.createOscillator()
+	worker(node, inputs) {
 		osc.type = "sine"
-		osc.frequency.setTargetAtTime(inputs['pitch'], context.currentTime, 0)
-		outputs['sound'] = osc
+		osc.frequency.setTargetAtTime(inputs.pitch[0], context.currentTime, 0)
+		return { sound: osc }
 	}
 }
 
@@ -118,7 +125,7 @@ editor.use(TaskPlugin)
 
 var engine = new Rete.Engine('demo@0.1.0')
 
-const components = [new InComponent(), new TestComponent()]//, new OutComponent(), new OscComponent()]
+const components = [new InComponent(), new OutComponent(), new TestComponent(), new OscComponent()]
 components.map(c => {
 	editor.register(c)
 	engine.register(c)
@@ -139,12 +146,16 @@ genEvent.add('init', async function () {
 
 	//preset Nodes
 	await newNode(0, 0, 0, 0)
-	//await newNode(2, 0, 150, 0)
-	await newNode(1, 0, 300, 0)
+	await newNode(2, 0, 200, 150)
+	await newNode(3, 0, 200, 0)
+	await newNode(1, 0, 350, 0)
 	editor.connect(nodepages[0][0].outputs.get('note'), nodepages[0][1].inputs.get('value'))
-	editor.connect(nodepages[0][0].outputs.get('start'), nodepages[0][1].inputs.get('start'))
-	//editor.connect(nodepages[0][0].outputs.get('pitch'), nodepages[0][1].inputs.get('pitch'))
-	//editor.connect(nodepages[0][1].outputs.get('sound'), nodepages[0][2].inputs.get('sound'))
+	editor.connect(nodepages[0][0].outputs.get('start'), nodepages[0][1].inputs.get('run'))
+
+	editor.connect(nodepages[0][0].outputs.get('pitch'), nodepages[0][2].inputs.get('pitch'))
+	editor.connect(nodepages[0][0].outputs.get('start'), nodepages[0][2].inputs.get('start'))
+
+	editor.connect(nodepages[0][2].outputs.get('sound'), nodepages[0][3].inputs.get('sound'))
 
 	firstNodeCompile = true
 	editor.on('process nodecreated noderemoved connectioncreated connectionremoved', async () => {
