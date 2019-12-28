@@ -8,7 +8,7 @@ genEvent.add("init", function () {
 
 function updatenotes(start, stop) {
 	for (let i in stop) {
-		var ntd
+		/*var ntd
 		var n = stop[i]
 		for (let ii in playingnotes) {
 			var s = playingnotes[ii]
@@ -20,9 +20,12 @@ function updatenotes(start, stop) {
 			}
 		}
 		if (ntd) {
-			//ntd.stop()
+			ntd.stop()
 			$('.key')[n].style = {}
-		}
+		}*/
+		var n = stop[i]
+		genEvent.send('noteStop', n)
+		$('.key')[n].style = {}
 	}
 	for (let i in start) {
 		var n = start[i]
@@ -30,6 +33,6 @@ function updatenotes(start, stop) {
 
 		$('.key')[n].style['background-color'] = 'red'
 
-		playingnotes.unshift({ sound: 1, note: n })
+		//playingnotes.unshift({ sound: 1, note: n })
 	}
 }
