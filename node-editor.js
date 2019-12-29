@@ -11,24 +11,25 @@ genEvent.add('init', async function () {
 			this.task = {
 				outputs: { start: 'option', stop: 'option', note: 'output', pitch: 'output' },
 				init(task) {
-					console.log(['task',task])
-					console.log(['run',task.run()])
+					if (makeEvents) {
+						console.log('events made')
+						genEvent.add('noteStart',
+							function (note) {
+								task.run({ event: 'start', note })
+								task.reset()
+							}
+						)
+						genEvent.add('noteStop',
+							function (note) {
+								task.run({ event: 'stop', note })
+								task.reset()
+							}
+						)
+						makeEvents = false
+					}
 				}
 			}
-			console.log(['this',this])
-
-			genEvent.add('noteStart',
-				function (note) {
-					task.run({ event: 'start', note })
-					task.reset()
-				}
-			)
-			genEvent.add('noteStop',
-				function (note) {
-					task.run({ event: 'stop', note })
-					task.reset()
-				}
-			)
+			var makeEvents = true
 		}
 
 		builder(node) {
@@ -40,7 +41,8 @@ genEvent.add('init', async function () {
 		}
 
 		worker(node, inputs, data) {
-			this.closed = []//'note', 'pitch']
+			this.closed = ['note', 'pitch']
+			console.log(['InEvent', data.event])
 			if (data.event == 'start') {
 				this.closed.push('stop')
 			}
@@ -61,7 +63,7 @@ genEvent.add('init', async function () {
 			this.task = {
 				outputs: {},
 				init(task) {
-					task.run()
+					task.run({})
 					task.reset()
 				}
 			}
@@ -73,10 +75,10 @@ genEvent.add('init', async function () {
 		}
 
 		worker(node, inputs) {
-			console.log('out test')
-			if (inputs.sound)
-				console.log(inputs)
-			//connect to context.destination
+			if (inputs.sound) {
+				console.log(['outNode', inputs.sound[0]])
+				inputs.sound[0].connect(context.destination)
+			}
 		}
 	}
 
@@ -94,7 +96,7 @@ genEvent.add('init', async function () {
 				.addInput(new Rete.Input('run', 'Run', actionSocket))
 		}
 
-		worker(node, inputs) {
+		worker(node, inputs, data) {
 			console.log(inputs.value[0])
 		}
 	}
@@ -118,10 +120,8 @@ genEvent.add('init', async function () {
 		worker(node, inputs) {
 			this.closed = []
 			this.component.osc.type = "sine"
-			if (inputs.pitch)
+			if (inputs.pitch && inputs.pitch[0])
 				this.component.osc.frequency.setTargetAtTime(inputs.pitch[0], context.currentTime, 0)
-			console.log('fuck')
-			console.log(this.component.osc)
 			return { sound: this.component.osc }
 		}
 	}
@@ -161,18 +161,19 @@ genEvent.add('init', async function () {
 	await newNode(2, 0, 200, 150)
 	await newNode(3, 0, 200, 0)
 	await newNode(1, 0, 350, 0)
-	//editor.connect(nodepages[0][0].outputs.get('note'), nodepages[0][1].inputs.get('value'))
-	//editor.connect(nodepages[0][0].outputs.get('start'), nodepages[0][1].inputs.get('run'))
+	editor.connect(nodepages[0][0].outputs.get('note'), nodepages[0][1].inputs.get('value'))
+	editor.connect(nodepages[0][0].outputs.get('start'), nodepages[0][1].inputs.get('run'))
 
-	//editor.connect(nodepages[0][0].outputs.get('pitch'), nodepages[0][2].inputs.get('pitch'))
-	//editor.connect(nodepages[0][0].outputs.get('start'), nodepages[0][2].inputs.get('start'))
+	editor.connect(nodepages[0][0].outputs.get('pitch'), nodepages[0][2].inputs.get('pitch'))
+	editor.connect(nodepages[0][0].outputs.get('start'), nodepages[0][2].inputs.get('start'))
 
-	//editor.connect(nodepages[0][2].outputs.get('sound'), nodepages[0][3].inputs.get('sound'))
+	editor.connect(nodepages[0][2].outputs.get('sound'), nodepages[0][3].inputs.get('sound'))
 
 	editor.on('process nodecreated noderemoved connectioncreated connectionremoved', async () => {
 		if (editor.silent) return
 		await engine.abort()
 		await engine.process(editor.toJSON())
+		console.log('compiled')
 	})
 
 	engine.on('error', ({ message, data }) => {
