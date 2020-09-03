@@ -1,3 +1,5 @@
+"use strict";
+
 //Create Editor
 //create instance
 genEvent.add('init', async function () {

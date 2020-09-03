@@ -1,17 +1,11 @@
-<!DOCTYPE html>
 <html>
 
 <head lang="en">
-	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<title>Document</title>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+	<title>SArpnt DAW</title>
 	<link rel="stylesheet" href="style.css">
 
-	<!-- libraries-->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-
+	<!-- libs -->
 	<script src="https://cdn.jsdelivr.net/npm/rete@1.4.2/build/rete.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.6/vue.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/rete-vue-render-plugin@0.5.0/build/vue-render-plugin.min.js"></script>
@@ -34,8 +28,8 @@
 	<footer>
 		<div id="piano-options">
 			<input type="number" class="smallinput" id="midikeyoctave" value="4">
-			<button type="button" onclick="$('#midikeyoctave')[0].value--">-</button>
-			<button type="button" onclick="$('#midikeyoctave')[0].value++">+</button>
+			<button type="button" onclick="document.getElementById('midikeyoctave').value--">-</button>
+			<button type="button" onclick="document.getElementById('midikeyoctave').value++">+</button>
 		</div>
 		<div id="piano">
 			<div></div>
@@ -46,6 +40,7 @@
 	</div>
 
 	<!--scripts-->
+	<script src="style.js"></script>
 	<script src="drag.js"></script>
 	<script src="events.js"></script>
 	<script src="sound.js"></script>
