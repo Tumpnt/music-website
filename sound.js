@@ -4,7 +4,7 @@ var context;
 var songpitch = 440;
 var playingnotes = [];
 
-genEvent.add("init", function () {
+events.on("init", function () {
 	context = new AudioContext();
 });
 function updatenotes(start, stop) {
@@ -20,13 +20,13 @@ function updatenotes(start, stop) {
 		}
 		if (ntd)
 			ntd.stop();
-		genEvent.send('noteStop', note);
+		events.emit('noteStop', note);
 		let k = document.getElementsByClassName('key')[note];
 		if (k)
 			k.style.backgroundColor = '';
 	}
 	for (let note of start) {
-		genEvent.send('noteStart', note);
+		events.emit('noteStart', note);
 
 		let k = document.getElementsByClassName('key')[note];
 		if (k)

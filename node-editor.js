@@ -2,7 +2,7 @@
 
 //Create Editor
 //create instance
-genEvent.add('init', async function () {
+events.on('init', async function () {
 	const numSocket = new Rete.Socket('Number')
 	const soundSocket = new Rete.Socket('Sound')
 	const actionSocket = new Rete.Socket('Action')
@@ -15,13 +15,13 @@ genEvent.add('init', async function () {
 				init(task) {
 					if (makeEvents) {
 						console.log('events made')
-						genEvent.add('noteStart',
+						events.on('noteStart',
 							function (note) {
 								task.run({ event: 'start', note })
 								task.reset()
 							}
 						)
-						genEvent.add('noteStop',
+						events.on('noteStop',
 							function (note) {
 								task.run({ event: 'stop', note })
 								task.reset()

@@ -36,11 +36,14 @@
 			<div></div>
 		</div>
 	</footer>
-	<div id="clickoverlay" onclick="genEvent.send('init');this.remove();">
+	<div id="clickoverlay" onclick="events.send('init');this.remove();">
 		Click
 	</div>
 
 	<!-- scripts -->
+	<script>
+		var events = new EventHandler();
+	</script>
 	<script src="html.js"></script>
 	<script src="sound.js"></script>
 	<script src="input.js"></script>
