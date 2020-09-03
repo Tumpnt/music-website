@@ -1,7 +1,6 @@
 <html>
 
 <head lang="en">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>SArpnt DAW</title>
 	<link rel="stylesheet" href="style.css">
 
@@ -15,6 +14,8 @@
 	<script src="lib/WebMIDIAPI.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/webmidi"></script>
 	<script src="https://unpkg.com/interactjs/dist/interact.min.js"></script>
+
+	<script src="https://github.com/SArpnt/EventHandler/raw/master/script.js"></script>
 </head>
 
 <body>
@@ -35,28 +36,17 @@
 			<div></div>
 		</div>
 	</footer>
-	<div id="clickoverlay">
+	<div id="clickoverlay" onclick="genEvent.send('init');this.remove();">
 		Click
 	</div>
 
-	<!--scripts-->
+	<!-- scripts -->
 	<script src="style.js"></script>
 	<script src="drag.js"></script>
-	<script src="events.js"></script>
 	<script src="sound.js"></script>
 	<script src="input.js"></script>
 	<script src="node-editor.js"></script>
 	<script src="piano.js"></script>
-	<script id="clickscript">
-		document.getElementById('clickoverlay').onclick = function () {
-			var elem = document.getElementById('clickoverlay')
-			elem.parentNode.removeChild(elem);
-			//start()
-			genEvent.send("init");
-			var elem = document.getElementById('clickscript')
-			elem.parentNode.removeChild(elem);
-		}
-	</script>
 
 </body>
 

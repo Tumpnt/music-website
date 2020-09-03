@@ -45,12 +45,10 @@ genEvent.add('init', async function () {
 		worker(node, inputs, data) {
 			this.closed = ['note', 'pitch']
 			console.log(['InEvent', data.event])
-			if (data.event == 'start') {
+			if (data.event == 'start')
 				this.closed.push('stop')
-			}
-			else {
+			else
 				this.closed.push('start')
-			}
 			return {
 				note: data.note,
 				pitch: (2 ** ((data.note - 57) / 12)) * songpitch
@@ -175,7 +173,7 @@ genEvent.add('init', async function () {
 		if (editor.silent) return
 		await engine.abort()
 		await engine.process(editor.toJSON())
-		console.log('compiled')
+		console.log('compiled', editor.toJSON())
 	})
 
 	engine.on('error', ({ message, data }) => {
