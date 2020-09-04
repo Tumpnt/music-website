@@ -155,7 +155,7 @@ events.on('init', async function () {
 	const editor = new Rete.NodeEditor('demo@0.1.0', container);
 	editor.use(ConnectionPlugin.default);
 	editor.use(VueRenderPlugin.default);
-	editor.use(TaskPlugin);
+	editor.use(TaskPlugin.default);
 
 	var engine = new Rete.Engine('demo@0.1.0');
 
