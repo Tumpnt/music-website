@@ -5,7 +5,7 @@
  */
 for (let i = 0; i < 132; i++) {
 	let key = document.createElement("span");
-	key.setAttribute("note", i);
+	key.setAttribute("data-note", i);
 	if ([1, 3, 6, 8, 10].indexOf(i % 12) > -1)
 		key.setAttribute("class", "key black");
 	else {

@@ -11,32 +11,32 @@ events.on("init", function () {
 
 	WebMidi.enable(function (err) {
 		if (err) {
-			console.log("Could not access your MIDI devices.", err);
+			console.error("Could not access your MIDI devices.", err);
 			return;
 		}
 		console.log("This browser supports WebMIDI!");
 
-		var inputs = WebMidi.inputs;
-		var outputs = WebMidi.outputs;
-		for (var input of inputs) {
+		let inputs = WebMidi.inputs;
+		let outputs = WebMidi.outputs;
+		for (let input of inputs) {
 			input.addListener("noteon", "all", NoteOn);
 			input.addListener("noteoff", "all", NoteOff);
 		}
 	});
 });
 
-function press(key) {
-	if (midikey[key.code] != undefined) {
-		let note = midikey[key.code] + document.getElementById('midikeyoctave').value * 12;
-		if (playingnotes.includes(note))
-			return;
+function press({ code: key }) {
+	if (midikey[key] != undefined && !heldKeys.includes(key)) {
+		heldKeys.push(key);
+		let note = midikey[key] + document.getElementById('midikeyoctave').value * 12;
 		updatenotes([note], []);
 	}
 }
 
-function unpress(key) {
-	if (midikey[key.code] != undefined) {
-		let note = midikey[key.code] + document.getElementById('midikeyoctave').value * 12;
+function unpress({ code: key }) {
+	if (midikey[key] != undefined) {
+		heldKeys = heldKeys.filter(e => e != key);
+		let note = midikey[key] + document.getElementById('midikeyoctave').value * 12;
 		updatenotes([], [note]);
 	}
 }

@@ -3,15 +3,15 @@
 //Create Editor
 //create instance
 events.on('init', async function () {
-	const numSocket = new Rete.Socket('Number');
-	const noteSocket = new Rete.Socket('Notes');
-	const soundSocket = new Rete.Socket('Sound');
-	const actionSocket = new Rete.Socket('Action');
+	const numSocket = new Rete.Socket('Number'),
+		noteSocket = new Rete.Socket('Notes'),
+		soundSocket = new Rete.Socket('Sound'),
+		actionSocket = new Rete.Socket('Action');
 
 	class InComponent extends Rete.Component {
 		constructor() {
 			super('Input');
-			function runReset(task, event) {
+			function sendNote(task, event) {
 				return function (note) {
 					task.run({ event, note });
 					task.reset();
@@ -19,18 +19,16 @@ events.on('init', async function () {
 			}
 			let eventListeners;
 			this.task = {
-				outputs: { notes: 'option', pitch: 'output', },
+				outputs: { notes: ['option', 'output'], pitch: 'output', },
 				init(task) {
 					if (eventListeners) {
 						eventListeners.forEach(e => events.off(...e));
-						console.log('events deleted', eventListeners);
 					}
 					eventListeners = [
-						['noteStart', runReset(task, 'start')],
-						['noteStop', runReset(task, 'stop')],
+						['noteStart', sendNote(task, 'start')],
+						['noteStop', sendNote(task, 'stop')],
 					];
 					eventListeners.forEach(e => events.on(...e));
-					console.log('events made', eventListeners);
 				}
 			};
 		}
@@ -40,25 +38,28 @@ events.on('init', async function () {
 				.addOutput(new Rete.Output('notes', 'Notes', noteSocket))
 				.addOutput(new Rete.Output('pitch', 'Pitch', numSocket));
 			//.addOutput(new Rete.Output('start', 'Start', actionSocket))
-			//.addOutput(new Rete.Output('stop', 'Stop', actionSocket));
+			//.addOutput(new Rete.Output('stop', 'Stop', actionSocket))
 		}
 
 		worker(node, inputs, data) {
-			this.closed = ['pitch'];
-			console.log(data);
+			this.closed = [];
+			let pitch = 2 ** ((data.note - 57) / 12) * songPitch;
 			return {
-				notes: { note: data.note, action: data.event },
-				pitch: (2 ** ((data.note - 57) / 12)) * songpitch,
+				notes: { note: data.note, pitch, action: data.event },
+				pitch,
 			};
 		}
 	}
-
-
 	class OutComponent extends Rete.Component {
 		constructor() {
 			super('Output');
+			//this.connected = [];
 			this.task = {
 				outputs: {},
+				/*init() {
+					this.connected.forEach(e => e.disconnect);
+					this.connected = [];
+				}*/
 			};
 		}
 
@@ -68,16 +69,19 @@ events.on('init', async function () {
 		}
 
 		worker(node, inputs) {
-			console.log('outNode', inputs);
-			if (inputs) {
-				if (inputs.sound && inputs.sound[0]) {
-					console.log('outNode', inputs.sound);
-					inputs.sound[0].connect(context.destination);
-				}
+			for (let s of inputs.sound || []) {
+				s.connect && s.connect.forEach(n =>
+					n.connect(audioCtx.destination)
+					//this.component.connected.push(n);
+				);
+				s.disconnect && s.disconnect.forEach(n =>
+					n.disconnect(audioCtx.destination)
+					//this.component.connected =
+					//	this.component.connected.filter(e => e != n);
+				);
 			}
 		}
 	}
-
 	class TestComponent extends Rete.Component {
 		constructor() {
 			super('Test');
@@ -97,14 +101,20 @@ events.on('init', async function () {
 				console.log(...inputs.value);
 		}
 	}
-
 	class OscComponent extends Rete.Component {
 		constructor() {
 			super('Oscillator');
-			this.task = {
-				outputs: { sound: 'option' },
-			};
 			this.notes = [];
+			this.stopNote = function (o) {
+				o.osc.stop();
+			};
+			this.task = {
+				outputs: { sound: ['option', 'output'] },
+				init() {
+					this.notes.forEach(this.stopNote);
+					this.notes = [];
+				}
+			};
 		}
 
 		builder(node) {
@@ -118,86 +128,81 @@ events.on('init', async function () {
 
 		worker(node, inputs, data) {
 			this.closed = [];
-			console.log({ inputs, data });
-			if (data.event) {
-				if (inputs.notes[0]) {
-					if (data.event == "start") {
-						this.component.osc = context.createOscillator();
-						this.component.osc.type = "sine";
-						this.component.osc.frequency.setTargetAtTime(inputs.pitch[0], context.currentTime, 0);
-						this.component.osc.start();
-						this.component.notes.push({ note: data.note, osc: this.component.osc });
-						return { sound: this.component.osc };
-					} else {
-						let keptNotes = [];
-						this.component.notes.forEach(function (o) {
-							if (o.note == data.note)
-								o.osc.stop();
-							else
-								keptNotes.push(o);
-						});
-						this.component.notes = keptNotes;
-					}
+			let r = { sound: { connect: [], disconnect: [] } };
+			for (let note of inputs.notes || []) {
+				if (note.action == "start") {
+					let osc = audioCtx.createOscillator();
+					osc.type = "sine";
+					osc.frequency.setTargetAtTime(note.pitch, audioCtx.currentTime, 0);
+					osc.start();
+					this.component.notes.push({ note: note.note, osc });
+					r.sound.connect.push(osc);
+				} else {
+					let keptNotes = [];
+					let removedNotes = [];
+					this.component.notes.forEach(o => {
+						if (o.note == note.note) {
+							this.component.stopNote(o);
+							removedNotes.push(o);
+						} else
+							keptNotes.push(o);
+					});
+					this.component.notes = keptNotes;
+					r.sound.disconnect = r.sound.disconnect.concat(removedNotes);
 				}
-				console.log(data);
-			} else {
-				this.component.notes.forEach(o => o.osc.stop());
-				this.component.notes = [];
 			}
+			return r;
 		}
 	}
 
-
-
-	//initialize editor
+	// initialize editor
 	const container = document.querySelector('#rete');
+	const components = [new InComponent(), new OutComponent(), new TestComponent(), new OscComponent()];
+	let editors = [];
 
-	const editor = new Rete.NodeEditor('demo@0.1.0', container);
-	editor.use(ConnectionPlugin.default);
-	editor.use(VueRenderPlugin.default);
-	editor.use(TaskPlugin.default);
-
-	var engine = new Rete.Engine('demo@0.1.0');
-
-	let components = [new InComponent(), new OutComponent(), new TestComponent(), new OscComponent()];
-	components.forEach(c => {
-		editor.register(c);
-		engine.register(c);
-	});
-
-
-	var nodepages = [];
-	async function newNode(t, p, x, y) { //type, page, x,y
-		var tn = await components[t].createNode();
-		tn.position = [x, y];
-		editor.addNode(tn);
-		if (!nodepages[p])
-			nodepages[p] = [];
-		nodepages[p].push(tn);
+	function newEditor(id) {
+		id = `instrument@${id}.0.0`; // bad workaround, probably modify rete code instead
+		let e = {};
+		e.editor = new Rete.NodeEditor(id, container);
+		e.editor.use(ConnectionPlugin.default);
+		e.editor.use(VueRenderPlugin.default);
+		e.editor.use(TaskPlugin.default);
+		e.engine = new Rete.Engine(id);
+		components.forEach(c => {
+			e.editor.register(c);
+			e.engine.register(c);
+		});
+		e.start = function () {
+			e.editor.on('process nodecreated noderemoved connectioncreated connectionremoved', async () => {
+				if (e.editor.silent) return;
+				await e.engine.abort();
+				await e.engine.process(e.editor.toJSON());
+				console.log('compiled', e.editor.toJSON());
+			});
+			e.engine.on('error', console.error);
+			e.editor.trigger('process');
+			delete e.start;
+		};
+		return e;
 	}
 
+	async function newNode(t, p, x, y) { // type, editorid, x,y
+		let n = await components[t].createNode();
+		n.position = [x, y];
+		editors[p].editor.addNode(n);
+		if (!editors[p].nodes)
+			editors[p].nodes = [];
+		editors[p].nodes.push(n);
+	}
 
-	//preset Nodes
+	// testing stuff
+	editors.push(newEditor(editors.length));
 	await newNode(0, 0, 0, 0);
 	await newNode(3, 0, 200, 0);
 	await newNode(1, 0, 350, 0);
 
-	editor.connect(nodepages[0][0].outputs.get('notes'), nodepages[0][1].inputs.get('notes'));
-	editor.connect(nodepages[0][0].outputs.get('pitch'), nodepages[0][1].inputs.get('pitch'));
+	editors[0].editor.connect(editors[0].nodes[0].outputs.get('notes'), editors[0].nodes[1].inputs.get('notes'));
+	editors[0].editor.connect(editors[0].nodes[1].outputs.get('sound'), editors[0].nodes[2].inputs.get('sound'));
 
-	editor.connect(nodepages[0][1].outputs.get('sound'), nodepages[0][2].inputs.get('sound'));
-
-	editor.on('process nodecreated noderemoved connectioncreated connectionremoved', async () => {
-		if (editor.silent) return;
-		await engine.abort();
-		await engine.process(editor.toJSON());
-		console.log('compiled', editor.toJSON());
-	});
-
-	engine.on('error', ({ message, data }) => {
-		console.log(message);
-		console.log(data);
-	});
-
-	editor.trigger('process');
+	editors.forEach(e => e.start());
 });
